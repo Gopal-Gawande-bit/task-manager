@@ -2,6 +2,9 @@ import express from "express"
 import cors from "cors"
 import connectDB from "./src/config/database.js"
 import morgan from "morgan"
+import authRoutes from "./src/routes/auth-routes.js"
+import routes from "./src/routes/routes.js"
+import TokenService from "./src/services/token-service.js"
 
 const app = express()
 
@@ -13,5 +16,9 @@ connectDB()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+app.use("/api/v1/auth", authRoutes)
+app.use("/api/v1/public", routes)
+app.use("/api/v1", TokenService.authenticateToken, routes)
 
 export default app
